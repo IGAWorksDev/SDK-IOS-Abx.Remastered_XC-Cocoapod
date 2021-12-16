@@ -1,5 +1,5 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.4.2 (swiftlang-1205.0.28.2 clang-1205.0.19.57)
+// swift-compiler-version: Apple Swift version 5.5 (swiftlang-1300.0.31.1 clang-1300.0.29.1)
 // swift-module-flags: -target arm64-apple-ios9.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name AdBrixRM_XC
 @_exported import AdBrixRM_XC
 import AdServices
@@ -14,6 +14,7 @@ import SystemConfiguration
 import UIKit
 import UserNotifications
 import WebKit
+import _Concurrency
 import iAd
 import os.log
 import os
@@ -29,7 +30,7 @@ public enum Level : Swift.Int {
     get
   }
 }
-extension Level : Swift.Comparable {
+extension AdBrixRM_XC.Level : Swift.Comparable {
 }
 public func == (x: AdBrixRM_XC.Level, y: AdBrixRM_XC.Level) -> Swift.Bool
 public func < (x: AdBrixRM_XC.Level, y: AdBrixRM_XC.Level) -> Swift.Bool
@@ -194,13 +195,13 @@ open class Logger {
   @available(iOS 10.0, *)
   @objc public func setAdBrixRmPushNoticePopupCloseDelegate(delegate: AdBrixRM_XC.AdBrixRmPushNoticePopupCloseDelegate)
   @available(iOS 10.0, *)
-  @objc public func registerLocalPushNotification(date: Foundation.Date, title: Swift.String, subtitle: Swift.String?, body: Swift.String, sound: UserNotifications.UNNotificationSound?, categoryId: Swift.String?, threadId: Swift.String?, badgeNumber: Foundation.NSNumber?, image: Foundation.URL?, attrDic: Swift.Dictionary<Swift.String, Any>?, completionHandler: @escaping (Swift.Bool, Swift.Error?, Swift.String) -> Swift.Void)
+  @objc public func registerLocalPushNotification(date: Foundation.Date, title: Swift.String, subtitle: Swift.String?, body: Swift.String, sound: UserNotifications.UNNotificationSound?, categoryId: Swift.String?, threadId: Swift.String?, badgeNumber: Foundation.NSNumber?, image: Foundation.URL?, attrDic: Swift.Dictionary<Swift.String, Any>?, completionHandler: @escaping (_ isRegSucc: Swift.Bool, _ error: Swift.Error?, _ pushId: Swift.String) -> Swift.Void)
   @available(iOS 10.0, *)
-  @objc public func registerLocalPushNotification(id: Swift.String, date: Foundation.Date, title: Swift.String, subtitle: Swift.String?, body: Swift.String, sound: UserNotifications.UNNotificationSound?, categoryId: Swift.String?, threadId: Swift.String?, badgeNumber: Foundation.NSNumber?, image: Foundation.URL?, attrDic: Swift.Dictionary<Swift.String, Any>?, completionHandler: @escaping (Swift.Bool, Swift.Error?, Swift.String) -> Swift.Void)
+  @objc public func registerLocalPushNotification(id: Swift.String, date: Foundation.Date, title: Swift.String, subtitle: Swift.String?, body: Swift.String, sound: UserNotifications.UNNotificationSound?, categoryId: Swift.String?, threadId: Swift.String?, badgeNumber: Foundation.NSNumber?, image: Foundation.URL?, attrDic: Swift.Dictionary<Swift.String, Any>?, completionHandler: @escaping (_ isRegSucc: Swift.Bool, _ error: Swift.Error?, _ pushId: Swift.String) -> Swift.Void)
   @available(iOS 10.0, *)
-  @objc public func registerLocalPushNotification(id: Swift.String, dateComponents: Foundation.DateComponents, title: Swift.String, subtitle: Swift.String?, body: Swift.String, sound: UserNotifications.UNNotificationSound?, categoryId: Swift.String?, threadId: Swift.String?, badgeNumber: Foundation.NSNumber?, image: Foundation.URL?, attrDic: Swift.Dictionary<Swift.String, Any>?, completionHandler: @escaping (Swift.Bool, Swift.Error?, Swift.String) -> Swift.Void)
+  @objc public func registerLocalPushNotification(id: Swift.String, dateComponents: Foundation.DateComponents, title: Swift.String, subtitle: Swift.String?, body: Swift.String, sound: UserNotifications.UNNotificationSound?, categoryId: Swift.String?, threadId: Swift.String?, badgeNumber: Foundation.NSNumber?, image: Foundation.URL?, attrDic: Swift.Dictionary<Swift.String, Any>?, completionHandler: @escaping (_ isRegSucc: Swift.Bool, _ error: Swift.Error?, _ pushId: Swift.String) -> Swift.Void)
   @available(iOS 10.0, *)
-  @objc public func getRegisteredLocalPushNotification(completeHandler: @escaping (Swift.Array<Swift.String>?) -> ())
+  @objc public func getRegisteredLocalPushNotification(completeHandler: @escaping (_ idArr: Swift.Array<Swift.String>?) -> ())
   @available(iOS 10.0, *)
   @objc public func cancelLocalPushNotification(ids: Swift.Array<Swift.String>)
   @available(iOS 10.0, *)
@@ -212,7 +213,7 @@ open class Logger {
   @available(iOS 10.0, *)
   @objc public func userNotificationCenter(center: UserNotifications.UNUserNotificationCenter, response: UserNotifications.UNNotificationResponse)
   @available(iOS 10.0, *)
-  @objc public func getNoticePopup(completionHandler: @escaping (Swift.Dictionary<Swift.String, Any>) -> Swift.Void)
+  @objc public func getNoticePopup(completionHandler: @escaping (_ noticeInfo: Swift.Dictionary<Swift.String, Any>) -> Swift.Void)
   @available(iOS 10.0, *)
   @objc public func presentNoticePopup(popupSpaceKey: Swift.String, _ type: AdBrixRM_XC.AbxIAMNoticeType)
   @available(iOS 10.0, *)
@@ -684,12 +685,12 @@ open class Logger {
   @objc override dynamic public func setNilValueForKey(_ key: Swift.String)
   @objc deinit
 }
-extension URL {
+extension Foundation.URL {
   public var queryParameters: [Swift.String : Swift.String]? {
     get
   }
 }
-extension Formatters {
+extension AdBrixRM_XC.Formatters {
   public static let `default`: AdBrixRM_XC.Formatter
   public static let minimal: AdBrixRM_XC.Formatter
   public static let detailed: AdBrixRM_XC.Formatter
@@ -715,7 +716,7 @@ open class AdBrixMultiPushProviderController : ObjectiveC.NSObject {
   @objc override dynamic public func setNilValueForKey(_ key: Swift.String)
   @objc deinit
 }
-extension Themes {
+extension AdBrixRM_XC.Themes {
   public static let `default`: AdBrixRM_XC.Theme
   public static let dusk: AdBrixRM_XC.Theme
   public static let midnight: AdBrixRM_XC.Theme
@@ -929,7 +930,6 @@ public enum Component {
   final public let notificationId: Swift.Int
   @objc public init(campaignId: Swift.String, campaignRevisionNo: Swift.Int, stepId: Swift.String, cycleTime: Swift.String) throws
   @objc public func toString() -> Swift.String
-  @objc override dynamic public init()
   @objc deinit
 }
 extension AdBrixRM_XC.Level : Swift.Hashable {}
